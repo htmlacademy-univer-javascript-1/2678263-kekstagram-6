@@ -1,3 +1,5 @@
+import {toMinutes} from './util.js';
+
 const isValidStringLength = (string, maxLength) => string.length <= maxLength;
 
 const isPalindrome = (str) => {
@@ -22,20 +24,15 @@ const getNumberFromString = (str) => {
 };
 
 const canScheduleMeeting = ( dayStart , dayEnd, startTime, durationMinutes) => {
-  const toMinutes = (time) => {
-    const [h, m] = time.split(':').map(Number);
-    return h * 60 + m;
-  };
-
   const totalMinutesStartMeeting = toMinutes(startTime);
   const totalMinutesEndMeeting = toMinutes(startTime) + durationMinutes;
 
-  const totalMinutesStart = toMinutes(dayStart);
-  const totalMinutesEnd = toMinutes(dayEnd);
+  const totalMinutesStartDay = toMinutes(dayStart);
+  const totalMinutesEndDay = toMinutes(dayEnd);
 
   return (
-    totalMinutesStartMeeting >= totalMinutesStart &&
-    totalMinutesEndMeeting <= totalMinutesEnd
+    totalMinutesStartMeeting >= totalMinutesStartDay &&
+    totalMinutesEndMeeting <= totalMinutesEndDay
   );
 };
 
