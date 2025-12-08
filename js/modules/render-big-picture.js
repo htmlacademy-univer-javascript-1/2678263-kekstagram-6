@@ -14,9 +14,10 @@ const createBigPictureElement = () => {
 };
 
 let currentBigPictureElements = null;
+let closeHandler = null;
 
 const renderComments = (comments) => {
-  if (!currentBigPictureElements) return;
+  if (!currentBigPictureElements) {return;}
 
   const { socialComments } = currentBigPictureElements;
   socialComments.innerHTML = '';
@@ -46,12 +47,14 @@ const renderComments = (comments) => {
 
 const onEscKeydown = (evt) => {
   if (evt.key === 'Escape') {
-    closeBigPicture();
+    if (typeof closeHandler === 'function') {
+      closeHandler();
+    }
   }
 };
 
 const closeBigPicture = () => {
-  if (!currentBigPictureElements) return;
+  if (!currentBigPictureElements) { return; }
 
   currentBigPictureElements.element.classList.add('hidden');
   document.body.classList.remove('modal-open');
@@ -59,6 +62,8 @@ const closeBigPicture = () => {
   document.removeEventListener('keydown', onEscKeydown);
 
   currentBigPictureElements = null;
+
+  closeHandler = null;
 };
 
 const renderBigPicture = (photo) => {
