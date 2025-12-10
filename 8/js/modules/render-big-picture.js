@@ -19,6 +19,7 @@ let currentBigPictureElements = null;
 
 function onEscKeydown(evt) {
   if (evt.key === 'Escape') {
+    evt.preventDefault();
     closeBigPicture();
   }
 }
