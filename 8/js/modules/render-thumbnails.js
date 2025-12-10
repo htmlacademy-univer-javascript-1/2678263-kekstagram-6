@@ -4,12 +4,15 @@ const createThumbnail = (photo) => {
   const template = document.querySelector('#picture');
   const thumbnail = template.content.cloneNode(true);
   const thumbnailImage = thumbnail.querySelector('.picture__img');
+  const thumbnailLikes = thumbnail.querySelector('.picture__likes');
+  const thumbnailComments = thumbnail.querySelector('.picture__comments');
   thumbnailImage.src = photo.url;
   thumbnailImage.alt = photo.description;
-  thumbnail.querySelector('.picture__likes').textContent = photo.likes;
-  thumbnail.querySelector('.picture__comments').textContent = photo.comments.length;
+  thumbnailLikes.textContent = photo.likes;
+  thumbnailComments.textContent = photo.comments.length;
 
-  thumbnail.querySelector('.picture').addEventListener('click', (evt) => {
+  const thumbnailContainer = thumbnail.querySelector('.picture');
+  thumbnailContainer.addEventListener('click', (evt) => {
     evt.preventDefault();
     renderBigPicture(photo);
   });
