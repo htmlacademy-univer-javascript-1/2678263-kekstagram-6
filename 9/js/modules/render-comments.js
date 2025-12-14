@@ -43,8 +43,12 @@ function onLoadMoreClick() {
 }
 
 function updateCommentCount(elements) {
-  elements.commentCountBlock.innerHTML =
-    `${getRenderedCount()} из <span class="comments-count">${getTotalComments()}</span> комментариев`;
+  if(getTotalComments() === 0) {
+    elements.commentCountBlock.innerHTML = 'нет комментариев';
+  } else {
+    elements.commentCountBlock.innerHTML =
+      `${getRenderedCount()} из <span class="comments-count">${getTotalComments()}</span> комментариев`;
+  }
 }
 
 function toggleLoadMoreButton(elements) {

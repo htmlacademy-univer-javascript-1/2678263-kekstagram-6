@@ -10,7 +10,7 @@ import {
 const bigPictureElement = document.querySelector('.big-picture');
 
 const getBigPictureElements = () => ({
-  element: bigPictureElement,
+  modalContainer: bigPictureElement,
   socialComments: bigPictureElement.querySelector('.social__comments'),
   likesCount: bigPictureElement.querySelector('.likes-count'),
   commentsCount: bigPictureElement.querySelector('.comments-count'),
@@ -19,6 +19,8 @@ const getBigPictureElements = () => ({
   commentCountBlock: bigPictureElement.querySelector('.social__comment-count'),
   commentsLoader: bigPictureElement.querySelector('.comments-loader'),
   cancelButton: bigPictureElement.querySelector('.big-picture__cancel'),
+
+
 });
 
 function onEscKeydown(evt) {
@@ -32,7 +34,7 @@ function closeBigPicture() {
   const state = getState();
   if (!state) {return;}
   const { elements } = state;
-  state.elements.element.classList.add('hidden');
+  elements.modalContainer.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onEscKeydown);
   elements.commentsLoader.removeEventListener('click', onLoadMoreClick);
@@ -57,7 +59,7 @@ const renderBigPicture = (photo) => {
   updateCommentCount(bigPictureElements);
   toggleLoadMoreButton(bigPictureElements);
 
-  bigPictureElements.element.classList.remove('hidden');
+  bigPictureElements.modalContainer.classList.remove('hidden');
   document.body.classList.add('modal-open');
 
   document.addEventListener('keydown', onEscKeydown);
