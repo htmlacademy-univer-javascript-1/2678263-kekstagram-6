@@ -1,5 +1,12 @@
+import {
+  getState,
+  getTotalComments,
+  isAllCommentsLoaded,
+  loadMoreComments,
+  getRenderedCount
+} from './big-picture-state.js';
+
 const renderComments = (container, comments) => {
-  container.innerHTML = '';
   const fragment = document.createDocumentFragment();
 
   comments.forEach(({ avatar, name, message }) => {
@@ -24,4 +31,28 @@ const renderComments = (container, comments) => {
   container.append(fragment);
 };
 
-export { renderComments };
+function onLoadMoreClick() {
+  const state = getState();
+  if (!state) {return;}
+
+  const newComments = loadMoreComments();
+  renderComments(state.elements.socialComments, newComments);
+
+  updateCommentCount(state.elements);
+  toggleLoadMoreButton(state.elements);
+}
+
+function updateCommentCount(elements) {
+  if(getTotalComments() === 0) {
+    elements.commentCountBlock.innerHTML = 'нет комментариев';
+  } else {
+    elements.commentCountBlock.innerHTML =
+      `${getRenderedCount()} из <span class="comments-count">${getTotalComments()}</span> комментариев`;
+  }
+}
+
+function toggleLoadMoreButton(elements) {
+  elements.commentsLoader.classList.toggle('hidden', isAllCommentsLoaded());
+}
+
+export { renderComments, onLoadMoreClick, updateCommentCount, toggleLoadMoreButton };

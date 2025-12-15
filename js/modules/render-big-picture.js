@@ -1,10 +1,16 @@
-import { renderComments } from './render-comments.js';
+import { renderComments, onLoadMoreClick, updateCommentCount, toggleLoadMoreButton } from './render-comments.js';
 import { updateBigPictureUI } from './update-big-picture-ui.js';
+import {
+  initBigPictureState,
+  getState,
+  getRenderedCount,
+  resetState
+} from './big-picture-state.js';
 
 const bigPictureElement = document.querySelector('.big-picture');
 
 const getBigPictureElements = () => ({
-  element: bigPictureElement,
+  modalContainer: bigPictureElement,
   socialComments: bigPictureElement.querySelector('.social__comments'),
   likesCount: bigPictureElement.querySelector('.likes-count'),
   commentsCount: bigPictureElement.querySelector('.comments-count'),
@@ -13,9 +19,9 @@ const getBigPictureElements = () => ({
   commentCountBlock: bigPictureElement.querySelector('.social__comment-count'),
   commentsLoader: bigPictureElement.querySelector('.comments-loader'),
   cancelButton: bigPictureElement.querySelector('.big-picture__cancel'),
-});
 
-let currentBigPictureElements = null;
+
+});
 
 function onEscKeydown(evt) {
   if (evt.key === 'Escape') {
@@ -25,37 +31,40 @@ function onEscKeydown(evt) {
 }
 
 function closeBigPicture() {
-  currentBigPictureElements.element.classList.add('hidden');
+  const state = getState();
+  if (!state) {return;}
+  const { elements } = state;
+  elements.modalContainer.classList.add('hidden');
   document.body.classList.remove('modal-open');
-
   document.removeEventListener('keydown', onEscKeydown);
-  currentBigPictureElements = null;
+  elements.commentsLoader.removeEventListener('click', onLoadMoreClick);
+  resetState();
 }
 
 const renderBigPicture = (photo) => {
-  if (currentBigPictureElements) {
+  const state = getState();
+  if (state) {
     closeBigPicture();
   }
-
   const bigPictureElements = getBigPictureElements();
-  currentBigPictureElements = bigPictureElements;
+  initBigPictureState(photo, bigPictureElements);
 
   updateBigPictureUI(bigPictureElements, photo);
 
-  renderComments(bigPictureElements.socialComments, photo.comments);
+  bigPictureElements.socialComments.innerHTML = '';
 
-  if (bigPictureElements.commentCountBlock) {
-    bigPictureElements.commentCountBlock.classList.add('hidden');
-  }
-  if (bigPictureElements.commentsLoader) {
-    bigPictureElements.commentsLoader.classList.add('hidden');
-  }
+  const initialComments = photo.comments.slice(0, getRenderedCount());
+  renderComments(bigPictureElements.socialComments, initialComments);
 
-  bigPictureElements.element.classList.remove('hidden');
+  updateCommentCount(bigPictureElements);
+  toggleLoadMoreButton(bigPictureElements);
+
+  bigPictureElements.modalContainer.classList.remove('hidden');
   document.body.classList.add('modal-open');
 
   document.addEventListener('keydown', onEscKeydown);
   bigPictureElements.cancelButton.addEventListener('click', closeBigPicture, { once: true });
+  bigPictureElements.commentsLoader.addEventListener('click', onLoadMoreClick);
 };
 
 export { renderBigPicture };
