@@ -1195,7 +1195,7 @@ main {
   top: 0;
   right: 0;
   bottom: 0;
-  z-index: 1;
+  z-index: 2000;
 
   background-color: rgba(0, 0, 0, 0.8);
 }
@@ -1285,7 +1285,6 @@ main {
   opacity: 0.6;
 }
 
-
 /**
  * Экран загрузки изображения
  */
@@ -1322,6 +1321,14 @@ main {
           transform: translateX(-50%);
 }
 
+.form__error {
+  color: #d90000;
+  font-size: 12px;
+  background-color: #ffe6e6;
+  border-radius: 4px;
+  display: block;
+  margin-bottom: 16px;
+}
 
 /* Адаптивности чуток
    ========================================================================== */

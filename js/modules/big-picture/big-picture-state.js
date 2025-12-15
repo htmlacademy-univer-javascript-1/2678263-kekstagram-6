@@ -1,10 +1,10 @@
-import { COMMENTS_STEP } from './constants.js';
+import { COMMENTS_STEP } from '../shared/constants.js';
 
 let photoData = null;
 let domElements = null;
 let renderedCount = 0;
 
-export const getState = () => {
+const getState = () => {
   if (!photoData || !domElements) {
     return null;
   }
@@ -15,14 +15,14 @@ export const getState = () => {
   };
 };
 
-export const initBigPictureState = (photo, elements) => {
+const initBigPictureState = (photo, elements) => {
   photoData = photo;
   domElements = elements;
   renderedCount = Math.min(COMMENTS_STEP, photo.comments.length);
   return getState();
 };
 
-export const loadMoreComments = () => {
+const loadMoreComments = () => {
   if (!photoData) {
     return [];
   }
@@ -34,14 +34,24 @@ export const loadMoreComments = () => {
   return newComments;
 };
 
-export const isAllCommentsLoaded = () => !photoData || renderedCount >= photoData.comments.length;
+const isAllCommentsLoaded = () => !photoData || renderedCount >= photoData.comments.length;
 
-export const getRenderedCount = () => renderedCount;
+const getRenderedCount = () => renderedCount;
 
-export const getTotalComments = () => photoData ? photoData.comments.length : 0;
+const getTotalComments = () => photoData ? photoData.comments.length : 0;
 
-export const resetState = () => {
+const resetState = () => {
   photoData = null;
   domElements = null;
   renderedCount = 0;
+};
+
+export {
+  getState,
+  initBigPictureState,
+  loadMoreComments,
+  isAllCommentsLoaded,
+  getRenderedCount,
+  getTotalComments,
+  resetState
 };
