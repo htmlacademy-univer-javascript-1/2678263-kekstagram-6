@@ -1,4 +1,3 @@
-import { initFileInput } from './form-file-input.js';
 import { initFormClose } from './form-close.js';
 import { initFormValidation } from './form-validation.js';
 import { showSuccessMessage } from './success-message.js';
@@ -12,44 +11,56 @@ const initUploadForm = () => {
   const form = document.querySelector('.img-upload__form');
   const cancelButton = document.querySelector('#upload-cancel');
   const descriptionInput = document.querySelector('.text__description');
+  const hashtagsInput = document.querySelector('.text__hashtags');
 
-  if (!uploadFileInput || !uploadOverlay || !previewImage || !form || !cancelButton || !descriptionInput) {
+  if (!uploadFileInput || !uploadOverlay || !previewImage || !form || !cancelButton || !descriptionInput || !hashtagsInput) {
     return;
   }
 
-  initFileInput(uploadFileInput, uploadOverlay, previewImage);
+  const openForm = () => {
+    uploadOverlay.classList.remove('hidden');
 
-  const closeForm = initFormClose(
-    cancelButton,
-    uploadOverlay,
-    form,
-    previewImage,
-    descriptionInput,
-    uploadFileInput
-  );
+    const closeForm = initFormClose(
+      cancelButton,
+      uploadOverlay,
+      form,
+      previewImage,
+      descriptionInput,
+      uploadFileInput,
+      hashtagsInput
+    );
 
-  const pristine = initFormValidation(form);
-  if (!pristine) {return;}
+    const pristine = initFormValidation(form);
+    if (!pristine) {return;}
 
-  form.addEventListener('submit', (evt) => {
-    evt.preventDefault();
-
-    if (pristine.validate()) {
-      try {
-        showSuccessMessage();
-
-        resetFormState(
-          form,
-          uploadFileInput,
-          document.querySelector('.scale__control--value'),
-          Array.from(document.querySelectorAll('.effects__radio')),
-          previewImage
-        );
-
-        closeForm();
-      } catch (err) {
-        showErrorMessage();
+    const handleSubmit = (evt) => {
+      evt.preventDefault();
+      if (pristine.validate()) {
+        try {
+          showSuccessMessage();
+          resetFormState(
+            form,
+            uploadFileInput,
+            document.querySelector('.scale__control--value'),
+            Array.from(document.querySelectorAll('.effects__radio')),
+            previewImage
+          );
+          closeForm();
+        } catch (err) {
+          showErrorMessage();
+        }
       }
+    };
+
+    form.removeEventListener('submit', handleSubmit);
+    form.addEventListener('submit', handleSubmit);
+  };
+
+  uploadFileInput.addEventListener('change', (evt) => {
+    const file = evt.target.files[0];
+    if (file) {
+      previewImage.src = URL.createObjectURL(file);
+      openForm();
     }
   });
 };

@@ -4,23 +4,27 @@ export const initFormClose = (
   form,
   previewImage,
   descriptionInput,
-  uploadFileInput
+  uploadFileInput,
+  hashtagsInput
 ) => {
-  if (!cancelButton || !uploadOverlay || !form || !previewImage || !descriptionInput || !uploadFileInput) {
-    return;
+  if (!cancelButton || !uploadOverlay || !form || !previewImage || !descriptionInput || !uploadFileInput || !hashtagsInput) {
+    return () => {};
   }
 
-  const closeForm = () => {
+  function closeForm() {
     uploadOverlay.classList.add('hidden');
     form.reset();
     uploadFileInput.value = '';
     URL.revokeObjectURL(previewImage.src);
     document.removeEventListener('keydown', onEscKeydown);
-  };
+  }
 
   function onEscKeydown(evt) {
     if (evt.key === 'Escape') {
-      if (document.activeElement === descriptionInput) {
+      if (
+        document.activeElement === descriptionInput ||
+        document.activeElement === hashtagsInput
+      ) {
         return;
       }
       evt.preventDefault();

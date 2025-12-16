@@ -7,22 +7,7 @@ const validateHashtagFormat = (value) => {
     .split(' ')
     .filter((tag) => tag.length > 0);
 
-  return tags.every((tag) => {
-    if (!tag.startsWith('#')) {
-      return false;
-    }
-
-    if ((tag.match(/#/g) || []).length > 1) {
-      return false;
-    }
-
-    const body = tag.slice(1);
-    if (!body) {
-      return false;
-    }
-
-    return /^[\p{L}0-9_]+$/u.test(body);
-  });
+  return tags.every((tag) => /^#[\p{L}0-9_]{1,19}$/u.test(tag));
 };
 
 const validateHashtagsCount = (value) => {
