@@ -1,3 +1,5 @@
+import {MAX_HASHTAGS_COUNT} from './../shared/constants.js';
+
 const validateHashtagFormat = (value) => {
   if (!value.trim()) {
     return true;
@@ -19,7 +21,7 @@ const validateHashtagsCount = (value) => {
     .split(' ')
     .filter((tag) => tag.length > 0);
 
-  return tags.length <= 5;
+  return tags.length <= MAX_HASHTAGS_COUNT;
 };
 
 const validateHashtagsUnique = (value) => {

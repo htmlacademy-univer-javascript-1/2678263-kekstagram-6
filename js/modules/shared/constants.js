@@ -5,6 +5,7 @@ export const MAX_NUMBER_OF_PHOTOS = 25;
 export const MIN_LIKES = 15;
 export const MAX_LIKES = 200;
 export const COMMENTS_STEP = 5;
+export const MAX_HASHTAGS_COUNT = 5;
 
 export const NAMES = [
   'Иван',
