@@ -7,9 +7,6 @@ export const initFormClose = (
   uploadFileInput,
   hashtagsInput
 ) => {
-  if (!cancelButton || !uploadOverlay || !form || !previewImage || !descriptionInput || !uploadFileInput || !hashtagsInput) {
-    return () => {};
-  }
 
   function closeForm() {
     uploadOverlay.classList.add('hidden');
