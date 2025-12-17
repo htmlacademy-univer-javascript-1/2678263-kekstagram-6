@@ -31,7 +31,6 @@ const initUploadForm = () => {
     );
 
     const pristine = initFormValidation(form);
-    if (!pristine) {return;}
 
     const handleSubmit = (evt) => {
       evt.preventDefault();
