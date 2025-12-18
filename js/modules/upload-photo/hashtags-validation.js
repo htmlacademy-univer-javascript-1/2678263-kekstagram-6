@@ -1,40 +1,24 @@
 import {MAX_HASHTAGS_COUNT} from './../shared/constants.js';
 
+const arrHashtags = (value) => value
+  .trim()
+  .split(' ')
+  .filter((tag) => tag.length > 0);
+
 const validateHashtagFormat = (value) => {
-  if (!value.trim()) {
-    return true;
-  }
-
-  const tags = value
-    .split(' ')
-    .filter((tag) => tag.length > 0);
-
+  const tags = arrHashtags(value);
   return tags.every((tag) => /^#[\p{L}0-9_]{1,19}$/u.test(tag));
 };
 
 const validateHashtagsCount = (value) => {
-  if (!value.trim()) {
-    return true;
-  }
-
-  const tags = value
-    .split(' ')
-    .filter((tag) => tag.length > 0);
-
+  const tags = arrHashtags(value);
   return tags.length <= MAX_HASHTAGS_COUNT;
 };
 
 const validateHashtagsUnique = (value) => {
-  if (!value.trim()) {
-    return true;
-  }
-
-  const tags = value
-    .toLowerCase()
-    .split(' ')
-    .filter((tag) => tag.length > 0);
-
-  return new Set(tags).size === tags.length;
+  const tags = arrHashtags(value);
+  const lowercasedTags = tags.map((tag) => tag.toLowerCase());
+  return new Set(lowercasedTags).size === lowercasedTags.length;
 };
 
 export {validateHashtagFormat, validateHashtagsCount, validateHashtagsUnique};
