@@ -1,4 +1,6 @@
 import {
+  validateHashtagStartsWithHash,
+  validateHashtagNotOnlyHash,
   validateHashtagFormat,
   validateHashtagsCount,
   validateHashtagsUnique
@@ -22,8 +24,24 @@ const initFormValidation = (form) => {
   pristine.addValidator(
     hashtagsInput,
     validateHashtagFormat,
-    'Хэш-тег должен состоять из символов # и от 1 до 19 букв, цифр и знака подчеркивания',
+    'После символа # хэш-тег должен содержать только буквы, цифры и знак подчёркивания - не более 20 символов',
     1,
+    true
+  );
+
+  pristine.addValidator(
+    hashtagsInput,
+    validateHashtagNotOnlyHash,
+    'Хэш-тег не может состоять только из символа #',
+    2,
+    true
+  );
+
+  pristine.addValidator(
+    hashtagsInput,
+    validateHashtagStartsWithHash,
+    'Хэш-тег должен начинаться с символа #',
+    3,
     true
   );
 
@@ -31,7 +49,7 @@ const initFormValidation = (form) => {
     hashtagsInput,
     validateHashtagsCount,
     `Нельзя указывать больше ${MAX_HASHTAGS_COUNT} хэш-тегов`,
-    2,
+    4,
     true
   );
 
@@ -39,7 +57,7 @@ const initFormValidation = (form) => {
     hashtagsInput,
     validateHashtagsUnique,
     'Хэш-теги не должны повторяться',
-    3,
+    5,
     true
   );
 

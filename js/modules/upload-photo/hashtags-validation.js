@@ -5,6 +5,19 @@ const arrHashtags = (value) => value
   .split(' ')
   .filter((tag) => tag.length > 0);
 
+
+const validateHashtagStartsWithHash = (value) => {
+  const tags = arrHashtags(value);
+  if (!tags.length) {return true;}
+  return tags.every((tag) => tag.startsWith('#'));
+};
+
+const validateHashtagNotOnlyHash = (value) => {
+  const tags = arrHashtags(value);
+  if (!tags.length) {return true;}
+  return tags.every((tag) => tag.length > 1);
+};
+
 const validateHashtagFormat = (value) => {
   const tags = arrHashtags(value);
   return tags.every((tag) => /^#[\p{L}0-9_]{1,19}$/u.test(tag));
@@ -21,4 +34,5 @@ const validateHashtagsUnique = (value) => {
   return new Set(lowercasedTags).size === lowercasedTags.length;
 };
 
-export {validateHashtagFormat, validateHashtagsCount, validateHashtagsUnique};
+
+export {validateHashtagStartsWithHash, validateHashtagNotOnlyHash, validateHashtagFormat, validateHashtagsCount, validateHashtagsUnique};
