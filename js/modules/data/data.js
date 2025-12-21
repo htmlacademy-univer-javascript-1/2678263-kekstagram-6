@@ -1,4 +1,4 @@
-import { getRandomInteger, getRandomArrayElement } from './util.js';
+import { getRandomInteger, getRandomArrayElement } from '../shared/util.js';
 import {
   MAX_NUMBER_OF_AVATARS,
   MAX_NUMBER_OF_COMMENTS,
@@ -9,7 +9,7 @@ import {
   NAMES,
   MESSAGES,
   DESCRIPTIONS,
-} from './constants.js';
+} from '../shared/constants.js';
 
 const createCommentIdGenerator = () => {
   let currentId = 1;
@@ -56,4 +56,3 @@ const createPhotosList = () => {
 };
 
 export { createPhotosList };
-

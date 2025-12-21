@@ -1,4 +1,4 @@
-import { renderBigPicture } from './render-big-picture.js';
+import { renderBigPicture } from '../big-picture/render-big-picture.js';
 
 const createThumbnail = (photo) => {
   const template = document.querySelector('#picture');

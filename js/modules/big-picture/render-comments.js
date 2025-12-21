@@ -33,7 +33,9 @@ const renderComments = (container, comments) => {
 
 function onLoadMoreClick() {
   const state = getState();
-  if (!state) {return;}
+  if (!state) {
+    return;
+  }
 
   const newComments = loadMoreComments();
   renderComments(state.elements.socialComments, newComments);

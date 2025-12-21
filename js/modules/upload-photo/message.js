@@ -1,0 +1,81 @@
+let currentMessageElement = null;
+let currentOnEscKeydown = null;
+let currentOnClickOutside = null;
+
+function showMessage({
+  type,
+  onHidden = () => {},
+  useCaptureOnEsc = false
+}) {
+  if (currentMessageElement) {
+    return;
+  }
+
+  const template = document.querySelector(`#${type}`);
+  if (!template) {
+    return;
+  }
+
+  const section = template.content.querySelector(`.${type}`);
+  if (!section) {
+    return;
+  }
+
+  const element = section.cloneType ? section.cloneType() : section.cloneNode(true);
+  currentMessageElement = element;
+
+  document.body.append(element);
+
+  const button = element.querySelector(`.${type}__button`);
+  if (button) {
+    button.addEventListener('click', (evt) => {
+      evt.stopPropagation();
+      hideCurrentMessage(onHidden);
+    });
+  }
+
+  const inner = element.querySelector(`.${type}__inner`);
+  if (inner) {
+    inner.addEventListener('click', (evt) => {
+      evt.stopPropagation();
+    });
+  }
+
+  currentOnEscKeydown = (evt) => {
+    if (evt.key === 'Escape') {
+      evt.stopPropagation();
+      evt.preventDefault();
+      hideCurrentMessage(onHidden);
+    }
+  };
+
+  currentOnClickOutside = (evt) => {
+    if (currentMessageElement && inner && !inner.contains(evt.target)) {
+      hideCurrentMessage(onHidden);
+    }
+  };
+
+  document.addEventListener('keydown', currentOnEscKeydown, { capture: useCaptureOnEsc });
+  document.addEventListener('click', currentOnClickOutside);
+}
+
+function hideCurrentMessage(onHidden) {
+  if (!currentMessageElement) {
+    return;
+  }
+
+  currentMessageElement.remove();
+  currentMessageElement = null;
+
+  document.removeEventListener('keydown', currentOnEscKeydown);
+  document.removeEventListener('click', currentOnClickOutside);
+
+  currentOnEscKeydown = null;
+  currentOnClickOutside = null;
+
+  if (typeof onHidden === 'function') {
+    onHidden();
+  }
+}
+
+export { showMessage };
