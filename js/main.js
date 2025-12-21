@@ -1,7 +1,7 @@
-import { renderThumbnails } from './modules/gallery/render-thumbnails.js';
-import { createPhotosList } from './modules/data/data.js';
 import { initUploadForm } from './modules/upload-photo/upload-form.js';
+import { initGallery } from './modules/gallery/gallery-init.js';
 
-const photos = createPhotosList();
-renderThumbnails(photos);
-initUploadForm();
+document.addEventListener('DOMContentLoaded', () => {
+  initUploadForm();
+  initGallery();
+});

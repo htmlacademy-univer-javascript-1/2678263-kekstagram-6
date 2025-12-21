@@ -4,6 +4,8 @@ let currentOnClickOutside = null;
 
 function showMessage({
   type,
+  title,
+  buttonText,
   onHidden = () => {},
   useCaptureOnEsc = false
 }) {
@@ -21,12 +23,25 @@ function showMessage({
     return;
   }
 
-  const element = section.cloneType ? section.cloneType() : section.cloneNode(true);
+  const element = section.cloneNode(true);
   currentMessageElement = element;
+
+  if (title !== undefined) {
+    const titleEl = element.querySelector(`.${type}__title`);
+    if (titleEl) {
+      titleEl.textContent = title;
+    }
+  }
+
+  const button = element.querySelector(`.${type}__button`);
+  if (buttonText !== undefined) {
+    if (button) {
+      button.textContent = buttonText;
+    }
+  }
 
   document.body.append(element);
 
-  const button = element.querySelector(`.${type}__button`);
   if (button) {
     button.addEventListener('click', (evt) => {
       evt.stopPropagation();
