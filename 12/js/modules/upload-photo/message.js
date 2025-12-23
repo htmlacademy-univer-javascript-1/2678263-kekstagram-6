@@ -5,19 +5,17 @@ let currentOnClickOutside = null;
 function showMessage({
   type,
   title,
-  buttonText,
-  onHidden = () => {},
-  useCaptureOnEsc = false
+  onPrimaryAction,
+  onContinue
 }) {
-  if (currentMessageElement) {
-    return;
-  }
 
+  if (currentMessageElement) {
+    hideCurrentMessage();
+  }
   const template = document.querySelector(`#${type}`);
   if (!template) {
     return;
   }
-
   const section = template.content.querySelector(`.${type}`);
   if (!section) {
     return;
@@ -26,28 +24,38 @@ function showMessage({
   const element = section.cloneNode(true);
   currentMessageElement = element;
 
-  if (title !== undefined) {
+  if (title) {
     const titleEl = element.querySelector(`.${type}__title`);
     if (titleEl) {
       titleEl.textContent = title;
     }
   }
 
-  const button = element.querySelector(`.${type}__button`);
-  if (buttonText !== undefined) {
-    if (button) {
-      button.textContent = buttonText;
-    }
+  const buttons = element.querySelectorAll(`.${type}__button`);
+
+  if (buttons.length > 0) {
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', (evt) => {
+        evt.stopPropagation();
+
+        if (btn.classList.contains('continue-button')) {
+          hideCurrentMessage(() => {
+            if (typeof onContinue === 'function') {
+              onContinue();
+            }
+          });
+        } else {
+          hideCurrentMessage(() => {
+            if (typeof onPrimaryAction === 'function') {
+              onPrimaryAction();
+            }
+          });
+        }
+      });
+    });
   }
 
   document.body.append(element);
-
-  if (button) {
-    button.addEventListener('click', (evt) => {
-      evt.stopPropagation();
-      hideCurrentMessage(onHidden);
-    });
-  }
 
   const inner = element.querySelector(`.${type}__inner`);
   if (inner) {
@@ -58,23 +66,34 @@ function showMessage({
 
   currentOnEscKeydown = (evt) => {
     if (evt.key === 'Escape') {
-      evt.stopPropagation();
+      if (!currentMessageElement) {
+        return;
+      }
       evt.preventDefault();
-      hideCurrentMessage(onHidden);
+      evt.stopPropagation();
+      hideCurrentMessage();
     }
   };
 
   currentOnClickOutside = (evt) => {
     if (currentMessageElement && inner && !inner.contains(evt.target)) {
-      hideCurrentMessage(onHidden);
+      hideCurrentMessage();
     }
   };
-
-  document.addEventListener('keydown', currentOnEscKeydown, { capture: useCaptureOnEsc });
+  document.addEventListener('keydown', currentOnEscKeydown, { capture: true });
   document.addEventListener('click', currentOnClickOutside);
 }
 
-function hideCurrentMessage(onHidden) {
+function hideCurrentMessage(callback) {
+  if (currentOnEscKeydown) {
+    document.removeEventListener('keydown', currentOnEscKeydown);
+    currentOnEscKeydown = null;
+  }
+  if (currentOnClickOutside) {
+    document.removeEventListener('click', currentOnClickOutside);
+    currentOnClickOutside = null;
+  }
+
   if (!currentMessageElement) {
     return;
   }
@@ -82,14 +101,8 @@ function hideCurrentMessage(onHidden) {
   currentMessageElement.remove();
   currentMessageElement = null;
 
-  document.removeEventListener('keydown', currentOnEscKeydown);
-  document.removeEventListener('click', currentOnClickOutside);
-
-  currentOnEscKeydown = null;
-  currentOnClickOutside = null;
-
-  if (typeof onHidden === 'function') {
-    onHidden();
+  if (typeof callback === 'function') {
+    callback();
   }
 }
 
