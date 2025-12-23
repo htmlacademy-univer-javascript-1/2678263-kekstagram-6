@@ -9,7 +9,8 @@ export async function initGallery() {
   } catch (error) {
     showMessage({
       type: 'gallery-error',
-      onHidden: initGallery
+      title: `Ошибка: ${error.message}. Не удалось загрузить фотографии`,
+      onPrimaryAction: initGallery,
     });
   }
 }

@@ -3,9 +3,7 @@ export const initFormClose = (
   uploadOverlay,
   form,
   previewImage,
-  descriptionInput,
-  uploadFileInput,
-  hashtagsInput
+  uploadFileInput
 ) => {
 
   function closeForm() {
@@ -17,24 +15,17 @@ export const initFormClose = (
   }
 
   function onEscKeydown(evt) {
-    if (evt.key === 'Escape') {
-      if (
-        document.activeElement === descriptionInput ||
-        document.activeElement === hashtagsInput
-      ) {
-        return;
-      }
-      evt.preventDefault();
+    if (evt.key === 'Escape' && !uploadOverlay.classList.contains('hidden')) {
       closeForm();
     }
   }
+
+  document.addEventListener('keydown', onEscKeydown);
 
   cancelButton.addEventListener('click', (evt) => {
     evt.preventDefault();
     closeForm();
   });
-
-  document.addEventListener('keydown', onEscKeydown);
 
   return closeForm;
 };

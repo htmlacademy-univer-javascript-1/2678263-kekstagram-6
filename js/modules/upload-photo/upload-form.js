@@ -1,7 +1,6 @@
 import { initFormClose } from './form-close.js';
 import { initFormValidation } from './form-validation.js';
-import { showSuccessMessage } from './success-message.js';
-import { showErrorMessage } from './error-message.js';
+import { showMessage } from './message.js';
 import { resetFormState } from './reset-form-state.js';
 import { sendData } from '../api/api.js';
 
@@ -20,6 +19,9 @@ const initUploadForm = () => {
   if (!uploadFileInput || !uploadOverlay || !previewImage || !form || !cancelButton || !descriptionInput || !hashtagsInput) {
     return;
   }
+
+  let currentSubmitHandler = null;
+  let currentPristine = null;
   const openForm = () => {
     uploadOverlay.classList.remove('hidden');
 
@@ -33,16 +35,20 @@ const initUploadForm = () => {
       hashtagsInput
     );
 
-    const pristine = initFormValidation(form);
+    if (currentSubmitHandler) {
+      form.removeEventListener('submit', currentSubmitHandler);
+    }
+
+    currentPristine = initFormValidation(form);
 
     const handleSubmit = async (evt) => {
       evt.preventDefault();
-      if (pristine.validate()) {
+      if (currentPristine.validate()) {
         try {
           submitButton.disabled = true;
           const formData = new FormData(form);
           await sendData(formData);
-          showSuccessMessage();
+          showMessage({ type: 'success' });
           resetFormState(
             form,
             uploadFileInput,
@@ -52,15 +58,15 @@ const initUploadForm = () => {
           );
           closeForm();
         } catch (err) {
-          showErrorMessage();
+          showMessage({ type: 'error' });
         } finally {
           submitButton.disabled = false;
         }
       }
     };
 
-    form.removeEventListener('submit', handleSubmit);
-    form.addEventListener('submit', handleSubmit);
+    currentSubmitHandler = handleSubmit;
+    form.addEventListener('submit', currentSubmitHandler);
   };
 
   uploadFileInput.addEventListener('change', (evt) => {

@@ -1368,6 +1368,7 @@ main {
   margin: 0;
   margin-bottom: 50px;
   font-size: 32px;
+  line-height: 1.6;
 }
 
 .gallery-error__title::before {
@@ -1381,7 +1382,15 @@ main {
   transform: translateX(-50%);
 }
 
+.gallery-error__buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
 .gallery-error__button {
+  flex: 1;
+  min-width: 0;
   padding: 5px 10px;
   color: #ffffff;
   text-transform: uppercase;
