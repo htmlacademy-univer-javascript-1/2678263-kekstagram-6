@@ -24,6 +24,7 @@ const initUploadForm = () => {
   let currentPristine = null;
   const openForm = () => {
     uploadOverlay.classList.remove('hidden');
+    document.body.classList.add('modal-open');
 
     const closeForm = initFormClose(
       cancelButton,

@@ -3,10 +3,13 @@ export const initFormClose = (
   uploadOverlay,
   form,
   previewImage,
-  uploadFileInput
+  descriptionInput,
+  uploadFileInput,
+  hashtagsInput
 ) => {
 
   function closeForm() {
+    document.body.classList.remove('modal-open');
     uploadOverlay.classList.add('hidden');
     form.reset();
     uploadFileInput.value = '';
@@ -15,8 +18,18 @@ export const initFormClose = (
   }
 
   function onEscKeydown(evt) {
-    if (evt.key === 'Escape' && !uploadOverlay.classList.contains('hidden')) {
-      closeForm();
+    if (evt.key === 'Escape') {
+      if (
+        document.activeElement === descriptionInput ||
+        document.activeElement === hashtagsInput
+      ) {
+        return;
+      }
+      evt.preventDefault();
+
+      if (!uploadOverlay.classList.contains('hidden')) {
+        closeForm();
+      }
     }
   }
 

@@ -6,6 +6,8 @@ export const MIN_LIKES = 15;
 export const MAX_LIKES = 200;
 export const COMMENTS_STEP = 5;
 export const MAX_HASHTAGS_COUNT = 5;
+export const NUMBER_OF_PHOTOS_PER_PAGE = 10;
+export const RERENDER_DELAY = 500;
 
 export const NAMES = [
   'Иван',
