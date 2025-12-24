@@ -231,6 +231,20 @@
   <template id="messages">
     <div class="img-upload__message  img-upload__message--loading">Загружаем...</div>
   </template>
+
+  <!-- Сообщение об ошибке загрузки галереи -->
+<template id="gallery-error">
+  <section class="gallery-error">
+    <div class="gallery-error__inner">
+      <h2 class="gallery-error__title">Не удалось загрузить фотографии</h2>
+      <div class="gallery-error__buttons">
+      <button type="button" class="gallery-error__button">Перезагрузить</button>
+      <button type="button" class="gallery-error__button continue-button">Продолжить</button>
+      </div>
+    </div>
+  </section>
+</template>
+
   <script src="js/vendor/pristine.min.js"></script>
   <script type="module" src="./js/main.js"></script>
 </body>
