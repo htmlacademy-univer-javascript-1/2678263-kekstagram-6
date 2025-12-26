@@ -6,6 +6,7 @@ const createThumbnail = (photo) => {
   const thumbnailImage = thumbnail.querySelector('.picture__img');
   const thumbnailLikes = thumbnail.querySelector('.picture__likes');
   const thumbnailComments = thumbnail.querySelector('.picture__comments');
+
   thumbnailImage.src = photo.url;
   thumbnailImage.alt = photo.description;
   thumbnailLikes.textContent = photo.likes;
@@ -20,7 +21,14 @@ const createThumbnail = (photo) => {
   return thumbnail;
 };
 
+const clearThumbnails = () => {
+  const thumbnails = document.querySelectorAll('.pictures .picture');
+  thumbnails.forEach((thumb) => thumb.remove());
+};
+
 const renderThumbnails = (photos) => {
+  clearThumbnails();
+
   const fragment = document.createDocumentFragment();
   const container = document.querySelector('.pictures');
 
@@ -32,4 +40,4 @@ const renderThumbnails = (photos) => {
   container.appendChild(fragment);
 };
 
-export { renderThumbnails };
+export { renderThumbnails, clearThumbnails };

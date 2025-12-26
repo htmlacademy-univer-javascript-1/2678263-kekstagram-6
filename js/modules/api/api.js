@@ -11,9 +11,8 @@ async function getData() {
   return jsonData;
 }
 
-
 async function sendData(formData) {
-  const response = await fetch(`${SERVER_URL}`, {
+  const response = await fetch(SERVER_URL, {
     method: 'POST',
     body: formData,
   });
