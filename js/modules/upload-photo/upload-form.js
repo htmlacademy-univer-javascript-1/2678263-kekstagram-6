@@ -3,6 +3,7 @@ import { initFormValidation } from './form-validation.js';
 import { showMessage } from './message.js';
 import { resetFormState } from './reset-form-state.js';
 import { sendData } from '../api/api.js';
+import { resetScale } from './scale.js';
 
 const initUploadForm = () => {
   const uploadFileInput = document.querySelector('#upload-file');
@@ -53,7 +54,6 @@ const initUploadForm = () => {
           resetFormState(
             form,
             uploadFileInput,
-            scaleValueInput,
             effectRadios,
             previewImage
           );
@@ -74,6 +74,7 @@ const initUploadForm = () => {
     const file = evt.target.files[0];
     if (file) {
       previewImage.src = URL.createObjectURL(file);
+      resetScale();
       openForm();
     }
   });
