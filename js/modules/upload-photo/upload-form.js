@@ -13,7 +13,6 @@ const initUploadForm = () => {
   const cancelButton = document.querySelector('#upload-cancel');
   const descriptionInput = document.querySelector('.text__description');
   const hashtagsInput = document.querySelector('.text__hashtags');
-  const scaleValueInput = document.querySelector('.scale__control--value');
   const effectRadios = Array.from(document.querySelectorAll('.effects__radio'));
   const submitButton = form.querySelector('#upload-submit');
 
