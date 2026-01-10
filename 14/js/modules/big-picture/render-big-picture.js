@@ -1,4 +1,4 @@
-import { renderComments, onLoadMoreClick, updateCommentCount, toggleLoadMoreButton } from './render-comments.js';
+import { renderComments, onLoadMoreClick, toggleLoadMoreButton } from './render-comments.js';
 import { updateBigPictureUI } from './update-big-picture-ui.js';
 import {
   initBigPictureState,
@@ -19,8 +19,6 @@ const getBigPictureElements = () => ({
   commentCountBlock: bigPictureElement.querySelector('.social__comment-count'),
   commentsLoader: bigPictureElement.querySelector('.comments-loader'),
   cancelButton: bigPictureElement.querySelector('.big-picture__cancel'),
-
-
 });
 
 function onEscKeydown(evt) {
@@ -51,12 +49,13 @@ const renderBigPicture = (photo) => {
 
   updateBigPictureUI(bigPictureElements, photo);
 
+  bigPictureElements.commentsCount.textContent = photo.comments.length;
+
   bigPictureElements.socialComments.innerHTML = '';
 
   const initialComments = photo.comments.slice(0, getRenderedCount());
   renderComments(bigPictureElements.socialComments, initialComments);
 
-  updateCommentCount(bigPictureElements);
   toggleLoadMoreButton(bigPictureElements);
 
   bigPictureElements.modalContainer.classList.remove('hidden');

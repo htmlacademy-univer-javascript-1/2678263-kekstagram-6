@@ -17,4 +17,9 @@ export const resetFormState = (
       previewImage.style.filter = '';
     }
   }
+
+  const effectPreviews = document.querySelectorAll('.effects__preview');
+  effectPreviews.forEach((preview) => {
+    preview.innerHTML = '';
+  });
 };

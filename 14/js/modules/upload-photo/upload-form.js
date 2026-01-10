@@ -3,7 +3,7 @@ import { initFormValidation } from './form-validation.js';
 import { showMessage } from './message.js';
 import { resetFormState } from './reset-form-state.js';
 import { sendData } from '../api/api.js';
-import { resetScale } from './scale.js';
+import { initScale} from './scale.js';
 
 const initUploadForm = () => {
   const uploadFileInput = document.querySelector('#upload-file');
@@ -13,7 +13,6 @@ const initUploadForm = () => {
   const cancelButton = document.querySelector('#upload-cancel');
   const descriptionInput = document.querySelector('.text__description');
   const hashtagsInput = document.querySelector('.text__hashtags');
-  const scaleValueInput = document.querySelector('.scale__control--value');
   const effectRadios = Array.from(document.querySelectorAll('.effects__radio'));
   const submitButton = form.querySelector('#upload-submit');
 
@@ -21,11 +20,34 @@ const initUploadForm = () => {
     return;
   }
 
+  let currentObjectURL = null;
+
+  const revokeCurrentObjectURL = () => {
+    if (currentObjectURL) {
+      URL.revokeObjectURL(currentObjectURL);
+      currentObjectURL = null;
+    }
+  };
+
+  const updateEffectPreviews = () => {
+    const effectPreviews = document.querySelectorAll('.effects__preview');
+    effectPreviews.forEach((preview) => {
+      preview.innerHTML = '';
+      preview.style.backgroundImage = `url(${previewImage.src})`;
+      preview.style.backgroundSize = 'cover';
+      preview.style.backgroundPosition = 'center';
+      preview.style.backgroundRepeat = 'no-repeat';
+    });
+  };
+
   let currentSubmitHandler = null;
   let currentPristine = null;
+
   const openForm = () => {
     uploadOverlay.classList.remove('hidden');
     document.body.classList.add('modal-open');
+
+    initScale();
 
     const closeForm = initFormClose(
       cancelButton,
@@ -34,7 +56,8 @@ const initUploadForm = () => {
       previewImage,
       descriptionInput,
       uploadFileInput,
-      hashtagsInput
+      hashtagsInput,
+      revokeCurrentObjectURL
     );
 
     if (currentSubmitHandler) {
@@ -51,12 +74,7 @@ const initUploadForm = () => {
           const formData = new FormData(form);
           await sendData(formData);
           showMessage({ type: 'success' });
-          resetFormState(
-            form,
-            uploadFileInput,
-            effectRadios,
-            previewImage
-          );
+          resetFormState(form, uploadFileInput, effectRadios, previewImage);
           closeForm();
         } catch (err) {
           showMessage({ type: 'error' });
@@ -73,9 +91,15 @@ const initUploadForm = () => {
   uploadFileInput.addEventListener('change', (evt) => {
     const file = evt.target.files[0];
     if (file) {
-      previewImage.src = URL.createObjectURL(file);
-      resetScale();
+
+      revokeCurrentObjectURL();
+
+      currentObjectURL = URL.createObjectURL(file);
+      previewImage.src = currentObjectURL;
+
       openForm();
+
+      updateEffectPreviews();
     }
   });
 };
