@@ -24,6 +24,8 @@ function showMessage({
   const element = section.cloneNode(true);
   currentMessageElement = element;
 
+  element.classList.remove('hidden');
+
   if (title) {
     const titleEl = element.querySelector(`.${type}__title`);
     if (titleEl) {

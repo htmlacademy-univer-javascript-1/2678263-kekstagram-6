@@ -8,6 +8,10 @@ export const COMMENTS_STEP = 5;
 export const MAX_HASHTAGS_COUNT = 5;
 export const NUMBER_OF_PHOTOS_PER_PAGE = 10;
 export const RERENDER_DELAY = 500;
+export const SCALE_STEP = 25;
+export const SCALE_MIN = 25;
+export const SCALE_MAX = 100;
+export const INITIAL_SCALE = 100;
 
 export const NAMES = [
   'Иван',

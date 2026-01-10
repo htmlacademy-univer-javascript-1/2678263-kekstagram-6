@@ -1,16 +1,14 @@
+import { resetScale } from './scale.js';
 export const resetFormState = (
   form,
   uploadFileInput,
-  scaleValueInput,
   effectRadios,
   previewImage
 ) => {
   form.reset();
   uploadFileInput.value = '';
 
-  if (scaleValueInput) {
-    scaleValueInput.value = '100%';
-  }
+  resetScale();
 
   const originalRadio = effectRadios.find((radio) => radio.value === 'none');
   if (originalRadio) {
@@ -19,4 +17,9 @@ export const resetFormState = (
       previewImage.style.filter = '';
     }
   }
+
+  const effectPreviews = document.querySelectorAll('.effects__preview');
+  effectPreviews.forEach((preview) => {
+    preview.innerHTML = '';
+  });
 };
